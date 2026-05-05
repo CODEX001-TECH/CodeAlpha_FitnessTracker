@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "fitness_tracker_app (Chrome)",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--web-port=5000"
+      ]
+    }
+  ]
+}

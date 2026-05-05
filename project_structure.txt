@@ -1,0 +1,19 @@
+lib/
+├── models/             # Data classes (e.g., Activity, User)
+├── services/           # Backend & API interactions (Firebase/Firestore)
+├── providers/          # State management (using Provider or Riverpod)
+├── screens/            # Main UI screens (Dashboard, Log Activity)
+├── widgets/            # Reusable UI components (Charts, Cards)
+└── utils/              # App constants, themes, and helpers
+
+
+lib/
+├── models/             # Activity, User, Goal models
+├── services/           # Firebase/Firestore & Auth services
+├── providers/          # State management (ActivityProvider, AuthProvider)
+├── screens/            
+│   ├── auth/           # Login, Signup
+│   └── main/           # Dashboard, Log Activity, Profile
+├── widgets/            # Charts, Progress bars, Custom buttons
+├── utils/              # Themes and helper functions
+└── constants/          # App strings, exercise types, colors
