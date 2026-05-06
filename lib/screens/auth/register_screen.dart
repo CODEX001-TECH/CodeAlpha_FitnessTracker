@@ -14,6 +14,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   void _register() async {
     if (_passwordController.text != _confirmPasswordController.text) {
@@ -105,7 +107,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 icon: Icons.lock_outline,
                 isDark: isDark,
                 onSurface: onSurface,
-                obscure: true,
+                obscure: _obscurePassword,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    color: onSurface.withOpacity(0.5),
+                  ),
+                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                ),
               ),
               const SizedBox(height: 20),
               _buildTextField(
@@ -114,7 +123,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 icon: Icons.lock_reset_outlined,
                 isDark: isDark,
                 onSurface: onSurface,
-                obscure: true,
+                obscure: _obscureConfirmPassword,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    color: onSurface.withOpacity(0.5),
+                  ),
+                  onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                ),
               ),
               const SizedBox(height: 40),
               Container(
@@ -162,6 +178,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required bool isDark,
     required Color onSurface,
     bool obscure = false,
+    Widget? suffixIcon,
   }) {
     return TextField(
       controller: controller,
@@ -171,6 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         labelText: label,
         labelStyle: TextStyle(color: onSurface.withOpacity(0.5)),
         prefixIcon: Icon(icon, color: onSurface.withOpacity(0.5)),
+        suffixIcon: suffixIcon,
         filled: true,
         fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.03),
         border: OutlineInputBorder(

@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
   void _login() async {
     setState(() => _isLoading = true);
@@ -106,7 +107,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 icon: Icons.lock_outline,
                 isDark: isDark,
                 onSurface: onSurface,
-                obscure: true,
+                obscure: _obscurePassword,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    color: onSurface.withOpacity(0.5),
+                  ),
+                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                ),
               ),
               const SizedBox(height: 30),
               Container(
@@ -252,6 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
     required bool isDark,
     required Color onSurface,
     bool obscure = false,
+    Widget? suffixIcon,
   }) {
     return TextField(
       controller: controller,
@@ -261,6 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
         labelText: label,
         labelStyle: TextStyle(color: onSurface.withOpacity(0.5)),
         prefixIcon: Icon(icon, color: onSurface.withOpacity(0.5)),
+        suffixIcon: suffixIcon,
         filled: true,
         fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.03),
         border: OutlineInputBorder(
