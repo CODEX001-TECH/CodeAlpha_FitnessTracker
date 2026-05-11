@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../services/auth_service.dart';
@@ -23,9 +24,21 @@ class AuthProvider with ChangeNotifier {
 
   Future<String?> signInWithGoogle() async {
     try {
-      GoogleAuthProvider googleProvider = GoogleAuthProvider();
-      // This is the most reliable way to login on the Web
-      await _auth.signInWithPopup(googleProvider);
+      if (kIsWeb) {
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        await _auth.signInWithPopup(googleProvider);
+      } else {
+        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+        if (googleUser == null) return "Sign in cancelled";
+        
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        
+        await _auth.signInWithCredential(credential);
+      }
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

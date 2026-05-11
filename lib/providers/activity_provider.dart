@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/activity.dart';
 import '../services/firestore_service.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'dart:async';
 
 class ActivityProvider with ChangeNotifier {
@@ -12,6 +13,7 @@ class ActivityProvider with ChangeNotifier {
   // Stream subscriptions to cancel on dispose
   StreamSubscription? _profileSubscription;
   StreamSubscription? _activitySubscription;
+  StreamSubscription? _backgroundSubscription;
 
   // Live tracking data
   int _liveSteps = 0;
@@ -25,6 +27,15 @@ class ActivityProvider with ChangeNotifier {
   ActivityProvider(this._firestoreService) {
     _fetchActivities();
     _fetchProfile();
+    _listenToBackgroundService();
+  }
+
+  void _listenToBackgroundService() {
+    _backgroundSubscription = FlutterBackgroundService().on('update').listen((event) {
+      if (event != null && event['steps'] != null) {
+        updateLiveSteps(event['steps']);
+      }
+    });
   }
 
   List<Activity> get activities => _activities;
@@ -83,6 +94,7 @@ class ActivityProvider with ChangeNotifier {
   void dispose() {
     _profileSubscription?.cancel();
     _activitySubscription?.cancel();
+    _backgroundSubscription?.cancel();
     super.dispose();
   }
 
