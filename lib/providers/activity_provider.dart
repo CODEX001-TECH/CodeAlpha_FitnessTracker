@@ -3,6 +3,7 @@ import '../models/activity.dart';
 import '../services/firestore_service.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 
 class ActivityProvider with ChangeNotifier {
@@ -31,6 +32,7 @@ class ActivityProvider with ChangeNotifier {
   }
 
   void _listenToBackgroundService() {
+    if (kIsWeb) return;
     _backgroundSubscription = FlutterBackgroundService().on('update').listen((event) {
       if (event != null && event['steps'] != null) {
         updateLiveSteps(event['steps']);

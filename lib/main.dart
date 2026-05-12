@@ -10,14 +10,24 @@ import 'screens/main/splash_screen.dart';
 import 'screens/main/main_screen.dart';
 import 'services/notification_service.dart';
 import 'services/background_service.dart';
+import 'package:flutter/foundation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await NotificationService.initialize();
-  await BackgroundService.initialize();
+  try {
+    if (!kIsWeb) {
+      await NotificationService.initialize();
+      await BackgroundService.initialize();
+    } else {
+      // Basic initialization for web if needed
+      print("Web detected: Skipping background/notification services");
+    }
+  } catch (e) {
+    print("Error during service initialization: $e");
+  }
   runApp(const MyApp());
 }
 
